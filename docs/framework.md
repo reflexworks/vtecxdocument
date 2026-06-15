@@ -584,7 +584,7 @@ const groups = await vtecxnext.getGroups()
 
 ### 登録
 
-エイリアスは別エントリを作るのではなく、**既存エントリの `link` 配列に `rel="alternate"` を追加**します。親パスの登録とエントリ更新を同一 `put()` にまとめます（親パスを先頭に配置すること）。
+エイリアスは別エントリを作るのではなく、**既存エントリの `link` 配列に `rel="alternate"` を追加**する。親パスの登録とエントリ更新を同一 `put()` にまとめる（親パスを先頭に配置すること）。
 
 ```typescript
 const customer = await vtecxnext.getEntry(`/crm/customer/${cid}`)
@@ -630,7 +630,7 @@ await vtecxnext.put({ feed: { entry: [{ ...(customer as any), link: updatedLinks
 
 ### エイリアスパスの権限設定
 
-エイリアスパスも `folderacls.json` に登録します。
+エイリアスパスも `folderacls.json` に登録する。
 
 ```json
 { "contributor": [{ "uri": "urn:vte.cx:acl:/_group/$admin,CURD" }, { "uri": "urn:vte.cx:acl:+,CURDE" }],
