@@ -143,6 +143,40 @@ await vtecxnext.log('エラーが発生しました', 'MyApp', 'ERROR')
 
 ---
 
+## reCAPTCHA検証
+
+### `verifyRecaptcha(token, action)`
+
+```typescript
+verifyRecaptcha(token: string, action: string): Promise<RecaptchaVerifyResult>
+```
+
+reCAPTCHA トークンを検証する。
+
+| 引数 | 型 | 説明 |
+| --- | --- | --- |
+| `token` | `string` | reCAPTCHA トークン |
+| `action` | `string` | reCAPTCHA アクション |
+
+戻り値の型:
+
+```typescript
+type RecaptchaVerifyResult = {
+  valid: boolean
+  action?: string
+  reason?: string
+}
+```
+
+```typescript
+const result = await vtecxnext.verifyRecaptcha(token, 'submit')
+if (!result.valid) {
+  return vtecxnext.response(400, { feed: { title: 'reCAPTCHA verification failed.', subtitle: result.reason } })
+}
+```
+
+---
+
 ## 型チェック
 
 ### `isVtecxNextError(e)`

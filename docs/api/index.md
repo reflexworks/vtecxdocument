@@ -22,7 +22,7 @@
 | PDF・署名 | [pdf.md](pdf.md) | `toPdf`, `putSignature`, `checkSignature` |
 | OAuth・TOTP | [oauth.md](oauth.md) | `oauthLine`, `getTotpLink`, `createTotp`, `loginWithTotp` |
 | ACL・エイリアス | [acl.md](acl.md) | `addacl`, `removeacl`, `addalias`, `removealias` |
-| ユーティリティ | [util.md](util.md) | `checkXRequestedWith`, `response`, `getParameter`, `log`, `property` |
+| ユーティリティ | [util.md](util.md) | `checkXRequestedWith`, `response`, `getParameter`, `log`, `property`, `verifyRecaptcha` |
 
 ---
 
@@ -85,7 +85,7 @@
 ### ユーティリティ
 `getParameter` / `hasParameter` / `buffer` / `isBlank` / `null2blank` /
 `checkXRequestedWith` / `setResponseHeader` / `response` / `sendMessage` /
-`property` / `log` / `isVtecxNextError`
+`property` / `log` / `isVtecxNextError` / `verifyRecaptcha`
 
 ---
 
