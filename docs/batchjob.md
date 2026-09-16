@@ -60,9 +60,44 @@ src/batchjob/{モジュール名}.ts
 
 スケジュール設定で指定するモジュール名は、通常、パスと拡張子を除いた `daily-report` です。
 
+### `/_html/batchjob` の事前登録
+
+初回アップロードの前に、登録先である `/_html/batchjob` フォルダーが vte.cx サービス上に存在している必要があります。フォルダーがない状態で Rspack のアップロードを実行するとエラーになります。
+
+プロジェクトの `setup/_settings/htmlfolders.xml` に `/_html/batchjob` を定義します。
+
+```xml
+<feed>
+  <entry>
+    <contributor>
+      <uri>urn:vte.cx:acl:/_group/$admin,CRUD</uri>
+    </contributor>
+    <link rel="self" href="/_html/batchjob" />
+  </entry>
+</feed>
+```
+
+実際のファイルでは、プロジェクトの権限設計に応じた `contributor` を設定してください。既存の `/_settings` や `/_html` の定義がある場合は削除せず、`/_html/batchjob` の Entry を追加します。
+
+対象サービスへログインした後、次のコマンドでフォルダー定義をアップロードします。
+
+```bash
+pnpm upload:htmlfolders
+```
+
+これは通常、サービスごとの初回セットアップ時、または `htmlfolders.xml` を変更したときに実行します。すでに `/_html/batchjob` が登録済みであれば、batchjob モジュールを更新するたびに実行する必要はありません。
+
 ## ビルドとアップロード
 
-対象の vte.cx サービスへログインした状態で、次のコマンドを実行します。
+対象の vte.cx サービスへログインし、初回は `/_html/batchjob` を登録してから、Rspack コマンドを実行します。
+
+```bash
+pnpm run login
+pnpm upload:htmlfolders
+pnpm exec rspack --env entry=/batchjob/{モジュール名}.ts
+```
+
+`/_html/batchjob` が登録済みの場合、モジュール更新時は次のコマンドだけで構いません。
 
 ```bash
 pnpm exec rspack --env entry=/batchjob/{モジュール名}.ts
@@ -293,12 +328,14 @@ exports.run = async function (vtecxnext: VtecxNext) {
 1. `src/batchjob/{モジュール名}.ts` を実装する。
 2. 型チェック、Lint、単体テストを実行する。
 3. 対象環境とログイン先を確認する。
-4. Rspack コマンドで JavaScript をビルドし、アップロードする。
-5. `/_html/batchjob/{モジュール名}.js` が登録されたことを確認する。
-6. 必要なサービスプロパティを設定する。
-7. `/_settings/properties` Entry の `rights` に `_batchjob.*` のスケジュールを登録する。
-8. 少量のデータまたは副作用を抑えた設定で動作確認する。
-9. 実行ログ、Entry の状態遷移、外部処理の結果を確認する。
+4. 初回は `setup/_settings/htmlfolders.xml` に `/_html/batchjob` が定義されていることを確認する。
+5. 初回は `pnpm upload:htmlfolders` で登録先フォルダーをアップロードする。
+6. Rspack コマンドで JavaScript をビルドし、アップロードする。
+7. `/_html/batchjob/{モジュール名}.js` が登録されたことを確認する。
+8. 必要なサービスプロパティを設定する。
+9. `/_settings/properties` Entry の `rights` に `_batchjob.*` のスケジュールを登録する。
+10. 少量のデータまたは副作用を抑えた設定で動作確認する。
+11. 実行ログ、Entry の状態遷移、外部処理の結果を確認する。
 
 ## AI コーディングエージェント向けチェックリスト
 
@@ -306,6 +343,8 @@ exports.run = async function (vtecxnext: VtecxNext) {
 
 - [ ] `exports.run = async function (vtecxnext)` の形式になっている。
 - [ ] 引数の `vtecxnext` を使用し、認証情報を埋め込んでいない。
+- [ ] `setup/_settings/htmlfolders.xml` に `/_html/batchjob` が定義されている。
+- [ ] 初回アップロード前に `pnpm upload:htmlfolders` を実行している。
 - [ ] ソースと登録先が `batchjob/{モジュール名}` で対応している。
 - [ ] スケジュール右端のモジュール名が登録ファイルと一致している。
 - [ ] 検索 URL に必要な `f` と件数上限がある。
@@ -319,6 +358,23 @@ exports.run = async function (vtecxnext: VtecxNext) {
 - [ ] 本番アップロード前に対象サービスを確認している。
 
 ## よくある問題
+
+### アップロード時に `/_html/batchjob` が存在しないエラーになる
+
+Rspack のアップロード先フォルダーがサービス上に未登録です。
+
+1. `setup/_settings/htmlfolders.xml` に `/_html/batchjob` の Entry を追加する。
+2. 対象サービスへログインする。
+3. `pnpm upload:htmlfolders` を実行する。
+4. Rspack のアップロードコマンドを再実行する。
+
+```bash
+pnpm run login
+pnpm upload:htmlfolders
+pnpm exec rspack --env entry=/batchjob/{モジュール名}.ts
+```
+
+`/_html` だけが存在していても、子フォルダーの `/_html/batchjob` が未登録であればアップロードできません。
 
 ### ジョブが起動しない
 
