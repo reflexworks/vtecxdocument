@@ -175,6 +175,29 @@ exports.run = async function (vtecxnext: VtecxNext) {
 
 利用できるメソッドと引数は、プロジェクトで使用している `@vtecx/vtecxnext` のバージョンに従ってください。
 
+## 禁止されている構文
+
+batchjobでは以下が禁止されています。
+TypeScript AST で判定しています。
+
+- import
+- export
+- class
+- super
+- eval
+- Function
+- AsyncFunction
+- GeneratorFunction
+- require
+- process
+- globalThis
+- global
+- XMLHttpRequest
+- WebSocket
+- Worker
+- WebAssembly
+- Proxy
+
 ### vte.cx データ操作の注意点
 
 - フィールド検索を行う URL には `f` パラメータを付ける。
@@ -392,7 +415,6 @@ pnpm exec rspack --env entry=/batchjob/{モジュール名}.ts
 
 ### 同じ処理が複数回実行される
 
-- Entry の状態を処理開始前に `processing` へ更新する。
 - revision 競合を検出し、競合した側で処理を続行しない。
 - 外部処理に冪等キーまたは処理済み判定を追加する。
 - 実行間隔より処理時間が長くなっていないか確認する。
