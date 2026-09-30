@@ -17,7 +17,8 @@
 | 採番・カウンタ | [counter.md](counter.md) | `allocids`, `addids`, `getids`, `setids` |
 | サーバーセッション | [session.md](session.md) | `setSessionFeed`, `getSessionFeed`, `setSessionString` |
 | コンテンツ・ファイル | [content.md](content.md) | `putcontent`, `getcontent`, `savefiles`, `getSignedUrlToPutContent` |
-| メール・通知 | [notify.md](notify.md) | `sendMail`, `pushNotification`, `setMessageQueue` |
+| メール・通知 | [notify.md](notify.md) | `sendMail`, `pushNotification` |
+| メッセージキュー | [messagequeue.md](messagequeue.md) | `setMessageQueueStatus`, `setMessageQueue`, `getMessageQueue` |
 | 外部DB連携 | [db.md](db.md) | `getBQ`, `execBQ`, `queryRDB`, `execRDB`, `postBDBQ` |
 | PDF・署名 | [pdf.md](pdf.md) | `toPdf`, `putSignature`, `checkSignature` |
 | OAuth・TOTP | [oauth.md](oauth.md) | `oauthLine`, `getTotpLink`, `createTotp`, `loginWithTotp` |
@@ -64,7 +65,9 @@
 `getSignedUrlToPutContent` / `getSignedUrlToPostContent` / `getSignedUrlToGetContent`
 
 ### メール・通知
-`sendMail` / `pushNotification` /
+`sendMail` / `pushNotification`
+
+### メッセージキュー
 `setMessageQueueStatus` / `getMessageQueueStatus` / `setMessageQueue` / `getMessageQueue`
 
 ### 外部DB連携
