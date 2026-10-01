@@ -419,6 +419,16 @@ password#
 
 OR 条件: `?f&|field-eq-a&|field-eq-b`
 
+### 全文検索における複数項目の検索条件についての注意事項
+
+全文検索で複数項目が対象の場合、左辺において、|を使って複数の項目を記述してください。
+
+注意：検索条件と全文検索Indexの左辺は完全一致である必要があります。つまり、以下のリクエストは、subInfo.favorite.food|subInfo.favorite.music-ft-XXXのように指定してください。(項目の順序も一致させてください)
+
+```
+subInfo.favorite.food|subInfo.favorite.music;/master|/data
+```
+
 ---
 
 ## ユーザーと UID
