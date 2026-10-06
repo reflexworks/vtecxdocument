@@ -1,6 +1,6 @@
 # メール・通知
 
-メール送信・プッシュ通知・メッセージキューを操作するメソッド群。
+メール送信・プッシュ通知を行うメソッド群。メッセージキューは [messagequeue.md](messagequeue.md) を参照。
 
 ---
 
@@ -71,53 +71,4 @@ await vtecxnext.pushNotification('メッセージが届きました', [deviceTok
 
 ## メッセージキュー
 
-非同期処理の要求をキューに積み、処理状態を管理するための機能。`channel` 単位でキューを識別する。
-
-### `setMessageQueue(feed, channel)`
-
-```typescript
-setMessageQueue(feed: any, channel: string): Promise<boolean>
-```
-
-指定チャネルのキューに feed を登録する。
-
-```typescript
-await vtecxnext.setMessageQueue(
-  { feed: { entry: [{ title: 'export-job' }] } },
-  'export'
-)
-```
-
----
-
-### `getMessageQueue(channel)`
-
-```typescript
-getMessageQueue(channel: string): Promise<any>
-```
-
-指定チャネルのキューに登録された feed を取得する。
-
----
-
-### `setMessageQueueStatus(flag, channel)`
-
-```typescript
-setMessageQueueStatus(flag: boolean, channel: string): Promise<boolean>
-```
-
-指定チャネルのメッセージキューの有効・無効状態を設定する。
-
-```typescript
-await vtecxnext.setMessageQueueStatus(true, 'export')
-```
-
----
-
-### `getMessageQueueStatus(channel)`
-
-```typescript
-getMessageQueueStatus(channel: string): Promise<any>
-```
-
-指定チャネルのメッセージキューの状態を取得する。
+`setMessageQueueStatus` / `getMessageQueueStatus` / `setMessageQueue` / `getMessageQueue` は [messagequeue.md](messagequeue.md) を参照。
