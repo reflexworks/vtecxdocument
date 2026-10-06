@@ -28,13 +28,13 @@ WebSocket の代わりに、**送信側がキューへ積み、受信側がポ�
 
 `channel` は **`/{チャネル名}/{グループ}`** の形式で指定する。
 
-| 部分 | 説明 |
-| --- | --- |
-| 1 階層目 | 任意のチャネル名（用途ごとに分ける） |
+| 部分         | 説明                                                                                               |
+| ------------ | -------------------------------------------------------------------------------------------------- |
+| 1 階層目     | 任意のチャネル名（用途ごとに分ける）                                                               |
 | 2 階層目以降 | グループ。送信者はこのグループに参加している必要があり、送信先はこのグループのメンバーから選ばれる |
 
 ```typescript
-const channel = '/chat/_group/sales' // チャネル「chat」・グループ /_group/sales
+const channel = "/chat/_group/sales" // チャネル「chat」・グループ /_group/sales
 ```
 
 > グループ部分の表記（`_group/` を含めるか）は、利用前に実環境で確認すること。
@@ -44,11 +44,11 @@ const channel = '/chat/_group/sales' // チャネル「chat」・グループ /_
 
 ### サーバ内部のデータ
 
-| キー | 内容 | ACL |
-| --- | --- | --- |
-| `/_user/{UID}/mqstatus/{チャネルの変換値}` | ユーザーごと・チャネルごとの使用設定（title=チャネル、summary=flag） | ユーザー自身の領域 |
-| `/_mq/{チャネルの変換値}@{UID}` | 宛先ユーザーのキュー（連番は `addids` で採番） | `{グループ},CE` と `{UID},RDE` |
-| `/_mq/{チャネルの変換値}@{UID}/{連番}` | メッセージ本体（連番は 20 桁の 0 埋め） | 同上 |
+| キー                                       | 内容                                                                 | ACL                            |
+| ------------------------------------------ | -------------------------------------------------------------------- | ------------------------------ |
+| `/_user/{UID}/mqstatus/{チャネルの変換値}` | ユーザーごと・チャネルごとの使用設定（title=チャネル、summary=flag） | ユーザー自身の領域             |
+| `/_mq/{チャネルの変換値}@{UID}`            | 宛先ユーザーのキュー（連番は `addids` で採番）                       | `{グループ},CE` と `{UID},RDE` |
+| `/_mq/{チャネルの変換値}@{UID}/{連番}`     | メッセージ本体（連番は 20 桁の 0 埋め）                              | 同上                           |
 
 `/_mq` はシステムディレクトリ（ACL は `+,CE`）。アプリの `folderacls.json` に定義する必要はない。
 
@@ -64,17 +64,17 @@ setMessageQueueStatus(flag: boolean, channel: string): Promise<boolean>
 
 **ログインユーザー自身**のメッセージキュー使用設定を、チャネル単位で登録する。
 
-| 引数 | 型 | 説明 |
-| --- | --- | --- |
-| `flag` | `boolean` | `true`: 受信メッセージをキューに登録する／`false`: キューに登録せず Push 通知を送る |
-| `channel` | `string` | チャネル（`/{チャネル名}/{グループ}`） |
+| 引数      | 型        | 説明                                                                                |
+| --------- | --------- | ----------------------------------------------------------------------------------- |
+| `flag`    | `boolean` | `true`: 受信メッセージをキューに登録する／`false`: キューに登録せず Push 通知を送る |
+| `channel` | `string`  | チャネル（`/{チャネル名}/{グループ}`）                                              |
 
 - 未ログインはエラー。
 - **設定が無いユーザーは OFF とみなされる**。キューで受け取りたいユーザーは、受信を始める前に自分で `true` を設定する。
 - 他のユーザーの設定は変更できない（受信側が自分で呼ぶ）。
 
 ```typescript
-const channel = '/chat/_group/sales'
+const channel = "/chat/_group/sales"
 await vtecxnext.setMessageQueueStatus(true, channel)
 ```
 
@@ -107,33 +107,33 @@ setMessageQueue(feed: Entry[], channel: string): Promise<boolean>
 
 メッセージエントリを宛先ユーザーのキューへ登録する。
 
-| 引数 | 型 | 説明 |
-| --- | --- | --- |
-| `feed` | `Entry[]` | メッセージエントリの配列（`{ feed: { entry } }` ではなくエントリの配列を渡す） |
-| `channel` | `string` | チャネル（`/{チャネル名}/{グループ}`） |
+| 引数      | 型        | 説明                                                                           |
+| --------- | --------- | ------------------------------------------------------------------------------ |
+| `feed`    | `Entry[]` | メッセージエントリの配列（`{ feed: { entry } }` ではなくエントリの配列を渡す） |
+| `channel` | `string`  | チャネル（`/{チャネル名}/{グループ}`）                                         |
 
 #### メッセージエントリ
 
-| 項目 | 説明 |
-| --- | --- |
-| `summary` | メッセージ本文 |
-| `link` (`rel="to"`) の `___href` | 送信先。**UID・アカウント・`*`（グループ全員）** のいずれか。複数指定可 |
-| `title` | Push 通知に切り替わった場合のタイトル |
-| `subtitle` | Push 通知に切り替わった場合のサブタイトル（Expo 用） |
-| `content` | Push 通知に切り替わった場合の本文。**空なら Push 通知しない** |
-| `category` | Push 通知に切り替わった場合の data（Expo 用・key-value）。`_$scheme` がキー、`_$label` が値 |
-| `rights` | `'true'` を指定すると、**Push 通知に切り替わる場合でも Push 通知しない** |
+| 項目                             | 説明                                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------- |
+| `summary`                        | メッセージ本文                                                                              |
+| `link` (`rel="to"`) の `___href` | 送信先。**UID・アカウント・`*`（グループ全員）** のいずれか。複数指定可                     |
+| `title`                          | Push 通知に切り替わった場合のタイトル                                                       |
+| `subtitle`                       | Push 通知に切り替わった場合のサブタイトル（Expo 用）                                        |
+| `content`                        | Push 通知に切り替わった場合の本文。**空なら Push 通知しない**                               |
+| `category`                       | Push 通知に切り替わった場合の data（Expo 用・key-value）。`_$scheme` がキー、`_$label` が値 |
+| `rights`                         | `'true'` を指定すると、**Push 通知に切り替わる場合でも Push 通知しない**                    |
 
 ```typescript
 await vtecxnext.setMessageQueue(
   [
     {
-      link: [{ ___rel: 'to', ___href: targetUid }],
-      summary: JSON.stringify({ type: 'message.created', id: '0001' }),
-      rights: 'true', // Push 通知は不要（キューだけで通知する）
+      link: [{ ___rel: "to", ___href: targetUid }],
+      summary: JSON.stringify({ type: "message.created", id: "0001" }),
+      rights: "true", // Push 通知は不要（キューだけで通知する）
     },
   ],
-  '/chat/_group/sales'
+  "/chat/_group/sales",
 )
 ```
 
@@ -172,22 +172,22 @@ getMessageQueue(channel: string): Promise<Entry[] | null>
 
 ログインユーザー自身のキュー（`/_mq/{チャネルの変換値}@{UID}`）からメッセージを取得する。
 
-| 引数 | 型 | 説明 |
-| --- | --- | --- |
+| 引数      | 型       | 説明                                   |
+| --------- | -------- | -------------------------------------- |
 | `channel` | `string` | チャネル（`/{チャネル名}/{グループ}`） |
 
-| 戻り値 | 説明 |
-| --- | --- |
+| 戻り値    | 説明                                         |
+| --------- | -------------------------------------------- |
 | `Entry[]` | メッセージエントリの配列（本文は `summary`） |
-| `null` | メッセージが無い（HTTP 204） |
+| `null`    | メッセージが無い（HTTP 204）                 |
 
 - 続きのデータがあれば、取得件数がシステム設定 `_fetch.limit` 以上になるまで検索を繰り返す。
 - **返したメッセージはキューから削除される（非同期）**。フォルダ削除ではなく、受信したメッセージのキーを個別に削除する。
 
 ```typescript
-const entries = await vtecxnext.getMessageQueue('/chat/_group/sales')
+const entries = await vtecxnext.getMessageQueue("/chat/_group/sales")
 for (const e of entries ?? []) {
-  const message = JSON.parse(e.summary ?? '{}')
+  const message = JSON.parse(e.summary ?? "{}")
   // ...
 }
 ```
@@ -201,15 +201,15 @@ for (const e of entries ?? []) {
 1. `rights` が `true` でなく、受信側の Push 通知 OFF 設定も無ければ、Push 通知を送る。
 2. メッセージを削除する。
 
-| 設定（`/_settings/properties`） | 説明 | 既定値 |
-| --- | --- | --- |
-| `_messagequeue.expire.min` | 取り出されないメッセージを Push 通知・削除するまでの時間（分） | `5` |
+| 設定（`/_settings/properties`） | 説明                                                           | 既定値 |
+| ------------------------------- | -------------------------------------------------------------- | ------ |
+| `_messagequeue.expire.min`      | 取り出されないメッセージを Push 通知・削除するまでの時間（分） | `5`    |
 
 ---
 
 ## デバッグログ
 
-`/_settings/properties` に `_debuglog.notification=true` を設定すると、次の実行内容がログエントリに出力される（WebSocket・Push 通知のデバッグログと同じ設定）。
+`/_settings/properties` に `_debuglog.notification=true` を設定すると、次の実行内容がログエントリに出力される（Push 通知のデバッグログと同じ設定）。
 
 - メッセージキュー使用設定
 - メッセージ送信
@@ -224,19 +224,19 @@ for (const e of entries ?? []) {
 
 ```typescript
 // app/api/notice/route.ts
-import { NextRequest } from 'next/server'
-import { VtecxNext } from '@vtecx/vtecxnext'
+import { NextRequest } from "next/server"
+import { VtecxNext } from "@vtecx/vtecxnext"
 
-const CHANNEL = '/chat/_group/sales'
+const CHANNEL = "/chat/_group/sales"
 
 // 受信の準備（画面を開いたときに 1 回）
 export const POST = async (req: NextRequest) => {
   const vtecxnext = new VtecxNext(req)
-  if (!(await vtecxnext.isGroupMember('/_group/sales'))) {
-    await vtecxnext.addGroup('/_group/sales')
+  if (!(await vtecxnext.isGroupMember("/_group/sales"))) {
+    await vtecxnext.addGroup("/_group/sales")
   }
   await vtecxnext.setMessageQueueStatus(true, CHANNEL)
-  return vtecxnext.response(200, { feed: { title: 'ok' } })
+  return vtecxnext.response(200, { feed: { title: "ok" } })
 }
 
 // 受信（画面から数秒おきに呼ぶ）
@@ -256,7 +256,9 @@ useEffect(() => {
     if (stopped) return
     if (!document.hidden) {
       try {
-        const res = await fetch('/api/notice', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        const res = await fetch("/api/notice", {
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
         if (res.ok) handleMessages(await res.json())
       } catch {
         // 次の回で取り直す
