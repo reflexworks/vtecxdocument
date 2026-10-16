@@ -5,3 +5,9 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+/bin/
+
+# Eclipse
+.project
+.classpath
+.settings/
